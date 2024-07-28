@@ -1,36 +1,59 @@
 import random
+import Hangman_words
+import Hangman_images
 
+lives = 6
+
+#Funcion to write the right letter in the word
 def find_letter():
-    list_chosen_word = list(chosen_word)
     for i in range( len(list_chosen_word) ):
         if list_chosen_word[i] == letter_guess:
             guess_list[i] = letter_guess
-        else:
-            guess_list[i] = "_"
     return guess_list
 
-##words to choose
-word_list = ["aardvark", "baboon", "camel"]
+print(Hangman_images.logo)
 
-##generate random word
+#Choose one random word from the words list
+word_list = Hangman_words.word_list
 chosen_word = random.choice(word_list)
+list_chosen_word = list(chosen_word)
+
+#Create list with the lenght of the chosen world and a list to store repeated letters
 guess_list = []
-#create list with the lenght of the chosen world
 for i in range( 0, len(chosen_word) ):
-    guess_list.append('')
+    guess_list.append('_')
+repeated_letters = []
 
-print(f"{guess_list} and {chosen_word}")
 
-letter_guess = input("Guess one letter for the hangman game: ").lower()
+#Loop to ask the guess letter and perfom the game
+while guess_list != list_chosen_word and lives != 0:
+    letter_guess = input("Guess one letter for the hangman game: ").lower()
+    
+    #check if the letter is in the word
+    if repeated_letters.count(letter_guess) != 0:
+        print("\nYou already chose this letter. \n")
+        print( ''.join(guess_list) + '\n')
 
-find_letter()
+    elif chosen_word.find(letter_guess) != -1:
+        find_letter()
+        print( ''.join(guess_list) + '\n')
 
-if chosen_word.find(letter_guess) != -1:
-    print("The letter is in the word.")
-    print(guess_list)
+    else:
+        lives -= 1
+
+        print(f"\nThe letter {letter_guess} isn't in the word. \n")
+        print(Hangman_images.stages[lives])
+        print( ''.join(guess_list) + '\n' )
+
+    repeated_letters.append(letter_guess)
+
+#Condition to win
+if lives == 0:
+    print("You lost!")
 else:
-    print("The letter isn't in the word.")
-    print(guess_list)
+    print("You won! Congrats")
+
+
 
 
 
